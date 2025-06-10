@@ -1,59 +1,41 @@
-"use client"
+"use client";
 
 import {
   Upload,
   Brain,
   CheckCircle,
   Zap,
-  Leaf,
   Sparkles,
   Shield,
-  TrendingUp,
   LogIn,
   UserPlus,
   ArrowRight,
-  Star,
-  Timer,
   BarChart3,
   Camera,
   Smartphone,
   Globe,
   Award,
-  Target,
   Layers,
   Scan,
   ChevronDown,
   Play,
   Cpu,
   Database,
-  Lock,
-  Wifi,
-  Clock,
-  Users,
-  Activity,
-  FileImage,
   Microscope,
-  Beaker,
   Atom,
   Eye,
-  Heart,
-  ThumbsUp,
-  CheckCircle2,
-  Rocket,
-  Gauge,
-  Fingerprint,
-  Infinity,
   TrendingUp as Growth,
   Bolt as Lightning,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import DoodleBackground from "@/components/doodle-background";
+import UploadBackground from "@/components/upload-background";
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeFeature, setActiveFeature] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,119 +46,13 @@ export default function HomePage() {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove as EventListener);
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("mousemove", handleMouseMove as EventListener);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove as EventListener);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove as EventListener);
     };
-  }, []);
-
-  const testimonials = [
-    {
-      name: "Budi Santoso",
-      role: "Petani Padi, Jawa Tengah",
-      content: "AgriScan membantu saya mendeteksi penyakit blast lebih cepat. Hasil panen meningkat 30% dan kerugian berkurang drastis!",
-      rating: 5,
-      image: "B",
-      location: "Semarang",
-      harvest: "+30%"
-    },
-    {
-      name: "Siti Aminah",
-      role: "Petani Organik, Jawa Barat",
-      content: "Teknologi AI yang luar biasa! Sekarang saya bisa menangani penyakit tanaman dengan tepat waktu dan presisi tinggi.",
-      rating: 5,
-      image: "S",
-      location: "Bandung",
-      harvest: "+25%"
-    },
-    {
-      name: "Ahmad Fauzi",
-      role: "Kelompok Tani Maju, Sumatera",
-      content: "Interface yang mudah digunakan dan hasil analisis yang akurat. Sangat membantu petani modern seperti kami!",
-      rating: 5,
-      image: "A",
-      location: "Medan",
-      harvest: "+40%"
-    }
-  ];
-
-  const diseases = [
-    { name: "Blast Padi", accuracy: 98, cases: "3,456", color: "from-red-500 to-rose-600", severity: "Tinggi" },
-    { name: "Bercak Daun", accuracy: 96, cases: "2,890", color: "from-blue-500 to-indigo-600", severity: "Sedang" },
-    { name: "Tungro Virus", accuracy: 94, cases: "1,234", color: "from-purple-500 to-violet-600", severity: "Tinggi" },
-    { name: "Hawar Daun", accuracy: 97, cases: "2,156", color: "from-emerald-500 to-teal-600", severity: "Sedang" },
-    { name: "Kresek Bakteri", accuracy: 95, cases: "1,789", color: "from-orange-500 to-amber-600", severity: "Tinggi" },
-    { name: "Busuk Batang", accuracy: 93, cases: "987", color: "from-pink-500 to-rose-600", severity: "Rendah" },
-    { name: "Mosaic Virus", accuracy: 96, cases: "1,543", color: "from-green-500 to-emerald-600", severity: "Sedang" },
-    { name: "Leaf Curl", accuracy: 94, cases: "1,098", color: "from-cyan-500 to-blue-600", severity: "Rendah" }
-  ];
-
-  const features = [
-    {
-      icon: Zap,
-      title: "AI Lightning Detection",
-      desc: "Identifikasi penyakit tanaman dalam 2.3 detik menggunakan neural network terdepan",
-      color: "from-yellow-400 to-orange-500",
-      bgGradient: "from-yellow-50 to-orange-50",
-      stats: "⚡ 2.3s"
-    },
-    {
-      icon: BarChart3,
-      title: "Real-time Analytics",
-      desc: "Dashboard analitik komprehensif dengan prediksi cuaca dan monitoring IoT",
-      color: "from-blue-400 to-indigo-500",
-      bgGradient: "from-blue-50 to-indigo-50",
-      stats: "📊 Live Data"
-    },
-    {
-      icon: Smartphone,
-      title: "Mobile-First Design",
-      desc: "PWA (Progressive Web App) untuk akses offline dan pengalaman native",
-      color: "from-purple-400 to-pink-500",
-      bgGradient: "from-purple-50 to-pink-50",
-      stats: "📱 PWA Ready"
-    },
-    {
-      icon: Award,
-      title: "98.7% Precision",
-      desc: "Tingkat akurasi tertinggi dengan model ensemble deep learning",
-      color: "from-emerald-400 to-teal-500",
-      bgGradient: "from-emerald-50 to-teal-50",
-      stats: "🎯 98.7%"
-    },
-    {
-      icon: Layers,
-      title: "Multi-Platform Sync",
-      desc: "Sinkronisasi seamless dengan cloud storage dan backup otomatis",
-      color: "from-red-400 to-rose-500",
-      bgGradient: "from-red-50 to-rose-50",
-      stats: "☁️ Cloud Sync"
-    },
-    {
-      icon: Globe,
-      title: "Edge Computing",
-      desc: "Infrastruktur edge computing untuk latensi ultra-rendah",
-      color: "from-green-400 to-emerald-500",
-      bgGradient: "from-green-50 to-emerald-50",
-      stats: "🌐 <50ms"
-    }
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length);
-    }, 3000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -221,14 +97,18 @@ export default function HomePage() {
                 linear-gradient(rgba(16,185,129,0.3) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(16,185,129,0.3) 1px, transparent 1px)
               `,
-              backgroundSize: '50px 50px'
+              backgroundSize: "50px 50px",
             }}
           ></div>
         </div>
       </div>
 
       {/* Elegant Header with Transparent Background */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-lg shadow-md py-3' : 'py-5'}`}>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled ? "bg-white/90 backdrop-blur-lg shadow-md py-3" : "py-5"
+        }`}
+      >
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -236,15 +116,17 @@ export default function HomePage() {
               <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg mr-3">
                 <Scan className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold text-slate-800">Agri<span className="text-emerald-600">Scan</span></span>
+              <span className="text-xl font-bold text-slate-800">
+                Agri<span className="text-emerald-600">Scan</span>
+              </span>
             </div>
 
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-1">
-              {["Beranda", "Fitur", "Deteksi", "Testimoni", "Artikel", "FAQ"].map((item, index) => (
+              {["Beranda", "Cara Kerja", "Deteksi"].map((item, index) => (
                 <a
                   key={index}
-                  href={`#${item.toLowerCase()}`}
+                  href={`#${item.toLowerCase().replace(" ", "-")}`}
                   className="px-4 py-2 text-slate-600 hover:text-emerald-600 font-medium rounded-lg hover:bg-emerald-50 transition-all duration-300"
                 >
                   {item}
@@ -254,12 +136,18 @@ export default function HomePage() {
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-3">
-              <Link href="/login" className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center px-4 py-2 rounded-xl hover:bg-emerald-50 transition-all duration-300 border-2 border-transparent hover:border-emerald-200 group">
+              <Link
+                href="/login"
+                className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center px-4 py-2 rounded-xl hover:bg-emerald-50 transition-all duration-300 border-2 border-transparent hover:border-emerald-200 group"
+              >
                 <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                 Login
               </Link>
 
-              <Link href="/register" className="bg-white text-emerald-600 border-2 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-50 shadow-md hover:shadow-lg transition-all duration-300 px-4 py-2 rounded-xl font-bold flex items-center group">
+              <Link
+                href="/register"
+                className="bg-white text-emerald-600 border-2 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-50 shadow-md hover:shadow-lg transition-all duration-300 px-4 py-2 rounded-xl font-bold flex items-center group"
+              >
                 <UserPlus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                 Register
               </Link>
@@ -269,7 +157,10 @@ export default function HomePage() {
       </header>
 
       {/* Revolutionary Hero Section */}
-      <section className="relative py-40 min-h-screen flex items-center overflow-hidden">
+      <section
+        id="beranda"
+        className="relative py-40 min-h-screen flex items-center overflow-hidden"
+      >
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/60 via-teal-50/40 to-green-50/60"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_30%,rgba(16,185,129,0.15),transparent_60%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_70%,rgba(20,184,166,0.15),transparent_60%)]"></div>
@@ -290,13 +181,14 @@ export default function HomePage() {
           <div className="mb-10 animate-fade-in-up">
             <span className="bg-gradient-to-r from-emerald-100 via-teal-100 to-green-100 text-emerald-700 border-2 border-emerald-200/50 px-6 py-3 text-sm font-bold shadow-lg rounded-full inline-flex items-center backdrop-blur-lg group hover:scale-105 transition-all duration-300">
               <Shield className="w-4 h-4 mr-2 animate-pulse" />
-              🚀 Revolusi AI untuk Pertanian
-              <Lightning className="w-4 h-4 ml-2 text-yellow-500" />
+              Revolusi AI untuk Pertanian
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-800 mb-8 leading-none tracking-tight">
-            <span className="block animate-slide-in-left">Deteksi Penyakit</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-800 mb-8 leading-none tracking-tight font-amoria">
+            <span className="block animate-slide-in-left ">
+              Deteksi Penyakit
+            </span>
             <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 bg-clip-text text-transparent relative animate-slide-in-up block">
               Tanaman AI
               <div className="absolute -bottom-3 left-0 right-0 h-2 bg-gradient-to-r from-emerald-400/40 via-teal-400/40 to-green-400/40 rounded-full animate-pulse"></div>
@@ -332,11 +224,12 @@ export default function HomePage() {
             </Link>
           </div>
 
-
           {/* Animated Scroll Indicator */}
           <div className="absolute -bottom-35 left-0 right-0 flex justify-center z-10">
             <div className="flex flex-col items-center animate-bounce-slow">
-              <div className="text-emerald-600 text-sm font-bold mb-2 whitespace-nowrap">Scroll untuk eksplorasi</div>
+              <div className="text-emerald-600 text-sm font-bold mb-2 whitespace-nowrap">
+                Scroll untuk eksplorasi
+              </div>
               <div className="w-8 h-12 border-2 border-emerald-400 rounded-full flex justify-center">
                 <div className="w-1 h-3 bg-emerald-400 rounded-full mt-2 animate-pulse"></div>
               </div>
@@ -347,17 +240,27 @@ export default function HomePage() {
       </section>
 
       {/* Modern How It Works with Interactive Elements */}
-      <section id="fitur" className="py-28 bg-gradient-to-br from-white via-slate-50 to-emerald-50 relative overflow-hidden">
+      <section
+        id="cara-kerja"
+        className=" bg-gradient-to-br from-white via-slate-50 to-emerald-50 relative overflow-hidden z-0 w-full"
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.08),transparent_50%)]"></div>
+        <div className=" absolute z-[-1] w-full hidden lg:block">
+          <DoodleBackground />
+        </div>
 
-        <div className="container mx-auto px-6 relative">
+        <div className="container mx-auto px-6 relative py-32">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6 leading-tight">
+            <h2 className="text-4xl md:text-7xl font-bold text-slate-800 mb-6 leading-tight font-amoria">
               Cara Kerja
-              <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"> AgriScan</span>
+              <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+                {" "}
+                AgriScan
+              </span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed">
-              Proses deteksi revolusioner dalam 3 langkah sederhana dengan teknologi AI terdepan
+              Proses deteksi revolusioner dalam 3 langkah sederhana dengan
+              teknologi AI terdepan
             </p>
           </div>
 
@@ -371,7 +274,7 @@ export default function HomePage() {
                 bgColor: "from-emerald-50 to-teal-50",
                 step: "01",
                 tech: "Computer Vision",
-                features: [""]
+                features: [""],
               },
               {
                 icon: Brain,
@@ -381,7 +284,7 @@ export default function HomePage() {
                 bgColor: "from-teal-50 to-emerald-50",
                 step: "02",
                 tech: "Deep Learning",
-                features: [""]
+                features: [""],
               },
               {
                 icon: CheckCircle,
@@ -391,41 +294,39 @@ export default function HomePage() {
                 bgColor: "from-green-50 to-emerald-50",
                 step: "03",
                 tech: "Smart Analytics",
-                features: [""]
-              }
+                features: [""],
+              },
             ].map((step, index) => (
-              <div key={index} className="relative group">
-                <div className={`absolute inset-0 bg-gradient-to-br ${step.bgColor} rounded-2xl transform group-hover:scale-105 transition-all duration-700 opacity-70`}></div>
+              <div
+                key={index}
+                className="relative group bg-[#047857]/65 rounded-2xl py-8"
+              >
                 <div className="relative p-8 text-center">
                   {/* Step Number */}
-                  <div className="absolute top-6 right-6 text-6xl font-bold text-emerald-200/50 group-hover:text-emerald-300/70 transition-colors duration-500">
+                  <div className=" text-6xl font-bold text-emerald-200/50 group-hover:text-emerald-300/70 transition-colors duration-500 mb-3 font-amoria">
                     {step.step}
                   </div>
 
                   {/* Tech Badge */}
-                  <div className="absolute top-6 left-6 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-emerald-200">
-                    <span className="text-emerald-600 text-xs font-medium">{step.tech}</span>
-                  </div>
+                  {/* <div className="absolute top-6 left-6 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-emerald-200">
+                    <span className="text-emerald-600 text-xs font-medium">
+                      {step.tech}
+                    </span>
+                  </div> */}
 
                   {/* Main Icon */}
-                  <div className={`w-20 h-20 bg-gradient-to-r ${step.gradient} rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 relative`}>
-                    <step.icon className="w-10 h-10 text-white" />
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
-                      <Lightning className="w-3 h-3 text-white" />
-                    </div>
+                  <div
+                    className={`w-14 h-14 bg-[#047857] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 absolute z-[2] -top-5 -right-5`}
+                  >
+                    <step.icon className="w-8 h-8 text-white" />
                   </div>
 
-                  <h3 className="text-2xl font-bold text-slate-800 mb-4">{step.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed font-medium mb-5">{step.desc}</p>
-
-                  {/* Feature Tags */}
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {step.features.map((feature, idx) => (
-                      <span key={idx} className="bg-white/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-emerald-700 border border-emerald-200/50">
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
+                  <h3 className="text-3xl font-bold text-[#ffffff] mb-4">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed font-medium mb-5 text-[#ffffff]">
+                    {step.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -434,8 +335,14 @@ export default function HomePage() {
       </section>
 
       {/* Interactive Upload Section with Advanced Features */}
-      <section className="py-28 bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative overflow-hidden">
+      <section
+        id="deteksi"
+        className="py-28 bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative z-0 w-full overflow-hidden"
+      >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(20,184,166,0.12),transparent_50%)]"></div>
+        <div className="absolute z-[-1] w-full hidden lg:block">
+          <UploadBackground />
+        </div>
 
         {/* Floating Elements */}
         <div className="absolute top-20 left-20 w-12 h-12 bg-emerald-200/30 rounded-full animate-float blur-sm"></div>
@@ -445,10 +352,14 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
               Upload Foto
-              <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"> Tanaman</span>
+              <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+                {" "}
+                Tanaman
+              </span>
             </h2>
             <p className="text-xl text-slate-600 font-medium max-w-3xl mx-auto">
-              Drag & drop foto atau klik untuk memilih file dengan teknologi auto-enhancement
+              Drag & drop foto atau klik untuk memilih file dengan teknologi
+              auto-enhancement
             </p>
           </div>
 
@@ -461,9 +372,12 @@ export default function HomePage() {
               <div className="relative border-3 border-dashed border-emerald-300 hover:border-emerald-400 transition-all duration-700 bg-white/90 backdrop-blur-2xl shadow-xl hover:shadow-2xl rounded-3xl group-hover:scale-102 transform overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-5">
-                  <div className="absolute inset-0" style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2316a085' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                  }}></div>
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2316a085' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                  ></div>
                 </div>
 
                 <div className="relative p-12 text-center">
@@ -481,7 +395,8 @@ export default function HomePage() {
                     Klik untuk upload atau drag file ke sini
                   </h3>
                   <p className="text-base text-slate-500 font-medium mb-6">
-                    Format: JPG, PNG, JPEG (Max 10MB) • Auto-enhance • Smart crop
+                    Format: JPG, PNG, JPEG (Max 10MB) • Auto-enhance • Smart
+                    crop
                   </p>
 
                   {/* AI Processing Preview */}
@@ -522,9 +437,8 @@ export default function HomePage() {
         </div>
       </section>
 
-
       {/* Ultimate CTA Section */}
-      <section className="py-28 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 relative overflow-hidden">
+      <section className="py-40 bg-[#047857] relative overflow-hidden">
         {/* Advanced Background Effects */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.15),transparent_50%)]"></div>
@@ -541,13 +455,14 @@ export default function HomePage() {
             <span className="bg-white/20 text-white border border-white/30 px-6 py-2 text-sm font-bold shadow-lg rounded-full inline-flex items-center backdrop-blur-lg group hover:scale-105 transition-all duration-300">
               <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
               Bergabung Sekarang
-              <Rocket className="w-4 h-4 ml-2 text-yellow-300" />
             </span>
           </div>
 
           {/* Main Heading */}
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-            <span className="block animate-slide-in-left">Siap Revolusi Pertanian Anda?</span>
+            <span className="block animate-slide-in-left font-amoria">
+              Siap Revolusi Pertanian Anda?
+            </span>
           </h2>
 
           {/* CTA Buttons */}
@@ -585,20 +500,28 @@ export default function HomePage() {
                 <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg mr-3">
                   <Scan className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xl font-bold text-white">Agri<span className="text-emerald-400">Scan</span></span>
+                <span className="text-xl font-bold text-white">
+                  Agri<span className="text-emerald-400">Scan</span>
+                </span>
               </div>
               <p className="text-slate-400 text-sm mb-4">
-                Solusi cerdas untuk deteksi penyakit tanaman berbasis AI yang membantu petani meningkatkan hasil panen.
+                Solusi cerdas untuk deteksi penyakit tanaman berbasis AI yang
+                membantu petani meningkatkan hasil panen.
               </p>
             </div>
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-bold mb-4 text-white">Tautan Cepat</h3>
+              <h3 className="text-lg font-bold mb-4 text-white">
+                Tautan Cepat
+              </h3>
               <ul className="space-y-2">
-                {["Beranda", "Fitur", "Deteksi", "Testimoni", "Artikel", "FAQ"].map((item, index) => (
+                {["Beranda", "Cara Kerja", "Deteksi"].map((item, index) => (
                   <li key={index}>
-                    <a href={`#${item.toLowerCase()}`} className="text-slate-400 hover:text-emerald-400 text-sm transition-colors duration-300 flex items-center">
+                    <a
+                      href={`#${item.toLowerCase().replace(" ", "-")}`}
+                      className="text-slate-400 hover:text-emerald-400 text-sm transition-colors duration-300 flex items-center"
+                    >
                       <ArrowRight className="w-3 h-3 mr-2 text-emerald-500" />
                       {item}
                     </a>
@@ -615,33 +538,49 @@ export default function HomePage() {
                   <div className="mr-3 w-5 h-5 bg-emerald-900 rounded-full flex items-center justify-center text-emerald-500">
                     <i className="ri-mail-line text-xs"></i>
                   </div>
-                  <span className="text-slate-400 text-sm">info@agriscan.id</span>
+                  <span className="text-slate-400 text-sm">
+                    info@agriscan.id
+                  </span>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
-          </div>
+          <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center"></div>
         </div>
       </footer>
 
       {/* Custom Styles for Animations */}
       <style jsx>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
-        
+
         @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-15px);
+          }
         }
-        
+
         @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
-        
+
         @keyframes fade-in-up {
           0% {
             opacity: 0;
@@ -652,7 +591,7 @@ export default function HomePage() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes slide-in-left {
           0% {
             opacity: 0;
@@ -663,7 +602,7 @@ export default function HomePage() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes slide-in-right {
           0% {
             opacity: 0;
@@ -674,7 +613,7 @@ export default function HomePage() {
             transform: translateX(0);
           }
         }
-        
+
         @keyframes slide-in-up {
           0% {
             opacity: 0;
@@ -685,88 +624,92 @@ export default function HomePage() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes grid-move {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(50px, 50px); }
+          0% {
+            transform: translate(0, 0);
+          }
+          100% {
+            transform: translate(50px, 50px);
+          }
         }
-        
+
         .animate-float {
           animation: float 6s ease-in-out infinite;
         }
-        
+
         .animate-float-delayed {
           animation: float-delayed 8s ease-in-out infinite;
         }
-        
+
         .animate-bounce-slow {
           animation: bounce-slow 3s ease-in-out infinite;
         }
-        
+
         .animate-fade-in {
           animation: fade-in-up 0.8s ease-out;
         }
-        
+
         .animate-fade-in-up {
           animation: fade-in-up 1s ease-out;
         }
-        
+
         .animate-grid-move {
           animation: grid-move 20s linear infinite;
         }
-        
+
         .delay-300 {
           animation-delay: 0.3s;
         }
-        
+
         .delay-500 {
           animation-delay: 0.5s;
         }
-        
+
         .delay-700 {
           animation-delay: 0.7s;
         }
-        
+
         .animate-slide-in-left {
           animation: slide-in-left 1s ease-out;
         }
-        
+
         .animate-slide-in-right {
           animation: slide-in-right 1s ease-out 0.2s both;
         }
-        
+
         .animate-slide-in-up {
           animation: slide-in-up 1s ease-out 0.4s both;
         }
-        
+
         .rounded-4xl {
           border-radius: 2rem;
         }
-        
+
         .bg-gradient-radial {
           background: radial-gradient(circle, var(--tw-gradient-stops));
         }
-        
+
         .text-shadow-lg {
           text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
-        
+
         .backdrop-blur-2xl {
           backdrop-filter: blur(40px);
         }
-        
+
         .backdrop-blur-3xl {
           backdrop-filter: blur(64px);
         }
-        
+
         .border-3 {
           border-width: 3px;
         }
-        
+
         .shadow-3xl {
           box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
         }
-        
+
         .hover\\:shadow-3xl:hover {
           box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
         }
