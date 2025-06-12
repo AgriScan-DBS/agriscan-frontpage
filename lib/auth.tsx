@@ -11,19 +11,17 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
 interface User {
-  _id: string;
-  username: string;
+  userName: string;
   email: string;
-  fullname: string;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  login: (username: string, password: string) => Promise<void>;
+  login: (userName: string, password: string) => Promise<void>;
   register: (
-    username: string,
+    userName: string,
     email: string,
     password: string
   ) => Promise<void>;
@@ -53,15 +51,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = async (userName: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch("http://3.25.50.145/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ userName, password }),
       });
 
       const data = await response.json();
@@ -70,19 +68,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.message || "Login failed");
       }
 
-      setUser(data.data.user);
+      const dataUser: User = {
+        email: data.data.email,
+        userName: data.data.userName,
+      };
+
+      setUser(dataUser);
       setToken(data.data.token);
 
       // Store token in HttpOnly cookie (will be handled by the server)
-      Cookies.set("token", data.data.token, {
-        expires: 7, // 7 days
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      });
-
       // Store user data in localStorage (no sensitive info)
-      localStorage.setItem("user", JSON.stringify(data.data.user));
+      localStorage.setItem("user", JSON.stringify(data.data));
+      router.replace("/");
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -92,18 +89,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const register = async (
-    username: string,
+    userName: string,
     email: string,
     password: string
   ) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch("http://3.25.50.145/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ userName, email, password }),
       });
 
       const data = await response.json();
@@ -123,17 +120,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
-    Cookies.remove("token", { path: "/" });
-    localStorage.removeItem("user");
-    router.push("/login");
+    fetch("http://3.25.50.145/api/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(() => {
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("user");
+        router.push("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const forgotPassword = async (email: string) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/forgot-password",
+        "http://3.25.50.145/api/auth/forgot-password",
         {
           method: "POST",
           headers: {
@@ -161,7 +169,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const resetPassword = async (token: string, password: string) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/reset-password",
+        "http://3.25.50.145/api/auth/reset-password",
         {
           method: "POST",
           headers: {

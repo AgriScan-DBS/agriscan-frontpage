@@ -5,13 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, LogInIcon } from "lucide-react";
 import AgriScanLogo from "@/components/logo";
+import { useAuth } from "@/lib/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -35,6 +33,24 @@ export default function RegisterPage() {
       window.removeEventListener("mousemove", handleMouseMove as EventListener);
     };
   }, []);
+
+  const handleLogin = () => {
+    if (!userName.trim() || !password.trim()) {
+      return;
+    }
+
+    login(userName, password)
+      .then(() => {
+        console.log("login berhasil");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setUserName("");
+        setPassword("");
+      });
+  };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-emerald-50 relative z-0 overflow-hidden">
@@ -463,7 +479,7 @@ export default function RegisterPage() {
               Agri<span className="text-[#75BE39]">Scan</span>
             </h1>
           </div>
-          <form className="flex flex-col items-center justify-center gap-4 w-full">
+          <div className="flex flex-col items-center justify-center gap-4 w-full">
             <div className="w-full flex flex-col gap-2">
               <label
                 htmlFor="username"
@@ -500,12 +516,12 @@ export default function RegisterPage() {
             </div>
 
             <button
-              type="submit"
+              onClick={() => handleLogin()}
               className="bg-[#047857] rounded-[16px] text-center py-3 w-full font-semibold text-[20px] text-white mt-7 md:mt-16"
             >
               Masuk
             </button>
-          </form>
+          </div>
 
           <h1 className=" text-[15px] md:text-[20px] font-medium">
             Belum punya akun ?{" "}

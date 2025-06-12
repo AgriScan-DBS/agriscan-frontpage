@@ -31,9 +31,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import DoodleBackground from "@/components/doodle-background";
 import UploadBackground from "@/components/upload-background";
+import { useAuth } from "@/lib/auth";
+import UploadSection from "@/components/upload-section";
+import { predictDisease } from "@/lib/services/api";
+import { toast } from "sonner";
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, token, logout } = useAuth();
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -53,6 +58,26 @@ export default function HomePage() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove as EventListener);
     };
+  }, []);
+
+  useEffect(() => {
+    // Force service worker update
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+        // Re-register the service worker
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((registration) => {
+            console.log("SW registered:", registration);
+          })
+          .catch((error) => {
+            console.log("SW registration failed:", error);
+          });
+      });
+    }
   }, []);
 
   return (
@@ -135,23 +160,35 @@ export default function HomePage() {
             </nav>
 
             {/* Action Buttons */}
-            <div className="flex items-center space-x-3">
-              <Link
-                href="/login"
-                className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center px-4 py-2 rounded-xl hover:bg-emerald-50 transition-all duration-300 border-2 border-transparent hover:border-emerald-200 group"
-              >
-                <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                Login
-              </Link>
+            {user === null && token === null ? (
+              <div className="flex items-center space-x-3">
+                <Link
+                  href="/login"
+                  className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center px-4 py-2 rounded-xl hover:bg-emerald-50 transition-all duration-300 border-2 border-transparent hover:border-emerald-200 group"
+                >
+                  <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                  Login
+                </Link>
 
-              <Link
-                href="/register"
-                className="bg-white text-emerald-600 border-2 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-50 shadow-md hover:shadow-lg transition-all duration-300 px-4 py-2 rounded-xl font-bold flex items-center group"
-              >
-                <UserPlus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
-                Register
-              </Link>
-            </div>
+                <Link
+                  href="/register"
+                  className="bg-white text-emerald-600 border-2 border-emerald-300 hover:border-emerald-400 hover:bg-emerald-50 shadow-md hover:shadow-lg transition-all duration-300 px-4 py-2 rounded-xl font-bold flex items-center group"
+                >
+                  <UserPlus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                  Register
+                </Link>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => logout()}
+                  className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center px-4 py-2 rounded-xl hover:bg-emerald-50 transition-all duration-300 border-2 border-transparent hover:border-emerald-200 group"
+                >
+                  <LogIn className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -205,15 +242,15 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20 animate-fade-in-up delay-500">
-            <Link
-              href="/login"
+            <a
+              href="#deteksi"
               className="relative bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 hover:from-emerald-600 hover:via-teal-600 hover:to-green-600 text-white shadow-xl hover:shadow-2xl transition-all duration-500 px-8 py-4 text-lg rounded-2xl font-bold flex items-center justify-center group hover:scale-105 transform overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               <Upload className="w-5 h-5 mr-3 group-hover:scale-125 transition-transform" />
               Mulai Scan Sekarang
               <ArrowRight className="w-4 h-4 ml-3 group-hover:translate-x-2 transition-transform" />
-            </Link>
+            </a>
             <Link
               href="/register"
               className="border-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50 shadow-lg hover:shadow-xl transition-all duration-500 px-8 py-4 text-lg rounded-2xl font-bold flex items-center justify-center bg-white/80 backdrop-blur-lg group hover:scale-105 transform"
@@ -316,7 +353,7 @@ export default function HomePage() {
 
                   {/* Main Icon */}
                   <div
-                    className={`w-14 h-14 bg-[#047857] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 absolute z-[2] -top-5 -right-5`}
+                    className={`w-14 h-14 bg-[#047857] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 absolute z-[2] -top-14 -right-5`}
                   >
                     <step.icon className="w-8 h-8 text-white" />
                   </div>
@@ -334,7 +371,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Interactive Upload Section with Advanced Features */}
+      {/* Upload Section */}
       <section
         id="deteksi"
         className="py-28 bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative z-0 w-full overflow-hidden"
@@ -358,81 +395,13 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xl text-slate-600 font-medium max-w-3xl mx-auto">
-              Drag & drop foto atau klik untuk memilih file dengan teknologi
-              auto-enhancement
+              Ambil foto atau pilih file untuk mendeteksi penyakit tanaman
+              dengan AI
             </p>
           </div>
 
           <div className="max-w-2xl mx-auto">
-            <div className="relative group">
-              {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-green-400 rounded-3xl blur-xl opacity-30 group-hover:opacity-40 transition-all duration-700 animate-pulse"></div>
-
-              {/* Main Upload Area */}
-              <div className="relative border-3 border-dashed border-emerald-300 hover:border-emerald-400 transition-all duration-700 bg-white/90 backdrop-blur-2xl shadow-xl hover:shadow-2xl rounded-3xl group-hover:scale-102 transform overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-5">
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2316a085' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                  ></div>
-                </div>
-
-                <div className="relative p-12 text-center">
-                  {/* Animated Upload Icon */}
-                  <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 via-teal-400 to-green-400 rounded-full flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-700">
-                      <Upload className="w-10 h-10 text-white group-hover:scale-110 transition-transform duration-300" />
-                    </div>
-                    {/* Pulse Ring */}
-                    <div className="absolute inset-0 w-20 h-20 mx-auto border-4 border-emerald-300 rounded-full animate-ping opacity-30"></div>
-                    <div className="absolute inset-0 w-20 h-20 mx-auto border-2 border-emerald-400 rounded-full animate-ping opacity-20 delay-75"></div>
-                  </div>
-
-                  <h3 className="text-slate-800 mb-4 text-2xl font-bold">
-                    Klik untuk upload atau drag file ke sini
-                  </h3>
-                  <p className="text-base text-slate-500 font-medium mb-6">
-                    Format: JPG, PNG, JPEG (Max 10MB) • Auto-enhance • Smart
-                    crop
-                  </p>
-
-                  {/* AI Processing Preview */}
-                  <div className="bg-gradient-to-r from-slate-50 to-emerald-50 rounded-xl p-4 border border-emerald-100">
-                    <div className="flex items-center justify-center space-x-3 text-xs text-slate-600">
-                      <div className="flex items-center">
-                        <Eye className="w-3 h-3 mr-1 text-emerald-600" />
-                        Computer Vision
-                      </div>
-                      <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-                      <div className="flex items-center">
-                        <Brain className="w-3 h-3 mr-1 text-teal-600" />
-                        Neural Network
-                      </div>
-                      <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-                      <div className="flex items-center">
-                        <Microscope className="w-3 h-3 mr-1 text-green-600" />
-                        Disease Detection
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Button with Loading Animation */}
-            <Link
-              href="/dashboard"
-              className="w-full mt-8 bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 hover:from-emerald-600 hover:via-teal-600 hover:to-green-600 text-white shadow-xl hover:shadow-2xl transition-all duration-700 py-4 text-lg rounded-2xl font-bold flex items-center justify-center group hover:scale-102 transform relative overflow-hidden"
-            >
-              {/* Shimmer Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              <Scan className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-              Mulai Scan Sekarang
-              <Sparkles className="w-5 h-5 ml-3 group-hover:rotate-12 transition-transform" />
-            </Link>
+            <UploadSection />
           </div>
         </div>
       </section>
@@ -468,7 +437,7 @@ export default function HomePage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
             <Link
-              href="/login"
+              href="#deteksi"
               className="relative bg-white text-emerald-600 hover:bg-emerald-50 shadow-xl hover:shadow-2xl transition-all duration-700 px-8 py-4 text-lg font-bold rounded-2xl flex items-center justify-center group hover:scale-105 transform overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-50/0 via-emerald-100/50 to-emerald-50/0 -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
