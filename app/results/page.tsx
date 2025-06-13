@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { dataInfo } from "@/data";
 import {
   ArrowLeft,
@@ -14,7 +14,11 @@ import Link from "next/link";
 import { usePredictionStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { leafVariants, circleVariants } from "@/data/animation";
+import {
+  leafVariants,
+  circleVariants,
+  getViewportDimensions,
+} from "@/data/animation";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -34,6 +38,17 @@ const staggerContainer = {
 // Leaf animation variants
 
 const BackgroundAnimation = () => {
+  const [dimensions, setDimensions] = useState(getViewportDimensions());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions(getViewportDimensions());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {[...Array(20)].map((_, i) => (
@@ -47,6 +62,8 @@ const BackgroundAnimation = () => {
           style={{
             width: Math.random() * 200 + 100 + "px",
             height: Math.random() * 200 + 100 + "px",
+            left: Math.random() * dimensions.width + "px",
+            top: Math.random() * dimensions.height + "px",
           }}
         />
       ))}
@@ -55,6 +72,17 @@ const BackgroundAnimation = () => {
 };
 
 const FallingLeaves = () => {
+  const [dimensions, setDimensions] = useState(getViewportDimensions());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions(getViewportDimensions());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {[...Array(50)].map((_, i) => (
@@ -68,6 +96,7 @@ const FallingLeaves = () => {
           style={{
             width: "20px",
             height: "20px",
+            left: Math.random() * dimensions.width + "px",
           }}
         >
           <Leaf className="w-full h-full text-white" />
