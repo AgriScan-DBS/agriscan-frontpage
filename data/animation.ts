@@ -1,13 +1,13 @@
 export const leafVariants = {
   initial: (i: number) => ({
-    x: Math.random() * window.innerWidth,
+    x: Math.random() * 1000,
     y: -100,
     rotate: Math.random() * 360,
     scale: Math.random() * 0.5 + 0.5,
   }),
   animate: (i: number) => ({
-    y: window.innerHeight + 100,
-    x: Math.random() * window.innerWidth,
+    y: 1000,
+    x: Math.random() * 1000,
     rotate: Math.random() * 720,
     scale: Math.random() * 0.5 + 0.5,
     transition: {
@@ -23,8 +23,8 @@ export const leafVariants = {
 export const circleVariants = {
   initial: (i: number) => ({
     scale: 0,
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
+    x: Math.random() * 1000,
+    y: Math.random() * 1000,
   }),
   animate: (i: number) => ({
     scale: [0, 1, 0],
@@ -36,4 +36,18 @@ export const circleVariants = {
       delay: Math.random() * 2,
     },
   }),
+};
+
+// Helper function to get viewport dimensions on client side
+export const getViewportDimensions = () => {
+  if (typeof window !== "undefined") {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  }
+  return {
+    width: 1000,
+    height: 1000,
+  };
 };

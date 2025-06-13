@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, LogInIcon } from "lucide-react";
 import AgriScanLogo from "@/components/logo";
 import { useAuth } from "@/lib/auth";
+import { LoadingOverlay } from "@/components/ui/loading";
+import { ToastContainer } from "@/components/ui/toast";
+import { useToast } from "@/hooks/useToast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -19,6 +22,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { toasts, showSuccess, showError, removeToast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,22 +42,19 @@ export default function RegisterPage() {
     };
   }, []);
 
-  const handleSumbit = async () => {
-    if (!email.trim() || !userName.trim() || !password.trim()) {
-      return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      await register(userName, email, password);
+      showSuccess("Registrasi berhasil! Silakan login.");
+      router.push("/login");
+    } catch (error) {
+      showError("Registrasi gagal. Silakan coba lagi.");
+    } finally {
+      setIsLoading(false);
     }
-    register(userName, email, password)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setEmail("");
-        setUserName("");
-        setPassword("");
-      });
   };
 
   return (
@@ -875,7 +876,7 @@ export default function RegisterPage() {
             </div>
 
             <button
-              onClick={() => handleSumbit()}
+              onClick={(e) => handleSubmit(e)}
               className="bg-[#047857] rounded-[16px] text-center py-3 w-full font-semibold text-[20px] text-white mt-7 md:mt-16"
             >
               Daftar
@@ -893,6 +894,8 @@ export default function RegisterPage() {
           </h1>
         </div>
       </div>
+      {isLoading && <LoadingOverlay />}
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
     </div>
   );
 }
